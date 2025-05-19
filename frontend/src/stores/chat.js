@@ -1,21 +1,49 @@
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
 export const useShatStore = defineStore('chat', () => {
-  const chat = ref('');
-  const rooms = ref([
-    { text: 'room 1', value: 'room1', active: true, id: 1, messages: [] },
-    { text: 'room 2', value: 'room2', active: false, id: 2, messages: [] },
-    { text: 'room 3', value: 'room3', active: false, id: 3, messages: [] },
-  ]);
-  const selectedRoom = computed(() => rooms.value.filter((item) => item.active === true)[0].value);
+  const chatUsers = ref([]);
+  const rooms = ref([]);
+  const currentRoom = ref('general'); // default
+  const messages = ref([]);
 
-  const setActiveRoom = (selectedValue) => {
-    rooms.value = rooms.value.map((room) => ({
-      ...room,
-      active: room.value === selectedValue,
-    }));
+  const setRooms = (updatedRooms) => {
+    rooms.value = updatedRooms;
+  };
+  const removeRoom = (roomId) => {
+    rooms.value = rooms.value.filter((r) => r._id !== roomId);
+  };
+  const setActiveRoom = (id) => {
+    rooms.value = rooms.value.map((room) => {
+      return room._id === id ? { ...room, active: true } : { ...room, active: false };
+    });
+    currentRoom.value = rooms.value.find((room) => room._id === id).value;
+    messages.value = [];
+  };
+  const updateUsers = (users) => {
+    chatUsers.value = users;
+  };
+  const addMessage = (message) => {
+    messages.value.push(message);
+  };
+  const updateMessages = (historyMessages) => {
+    messages.value = historyMessages;
+  };
+  const removeChatUser = (id) => {
+    chatUsers.value = chatUsers.value.filter((user) => user.id !== id);
   };
 
-  return { chat, rooms, selectedRoom, setActiveRoom };
+  return {
+    chatUsers,
+    messages,
+    currentRoom,
+    rooms,
+    addMessage,
+    updateUsers,
+    removeChatUser,
+    setActiveRoom,
+    updateMessages,
+    setRooms,
+    removeRoom,
+  };
 });
