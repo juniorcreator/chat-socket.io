@@ -4,37 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4667b7de-1793-4067-8e44-20bc7c264f34" name="Changes" comment="init2">
-      <change afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/data/activeUsers.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/data/chatUsers.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/data/users.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/middleware/authMiddleware.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/Message.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/Room.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/models/User.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/routes/auth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/ActiveUsers.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/ChatHeader.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/ChatMessages.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/ChatRooms.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/MessageForm.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/composables/useSocket.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/stores/auth.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/views/Login.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/views/Register.vue" afterDir="false" />
+    <list default="true" id="4667b7de-1793-4067-8e44-20bc7c264f34" name="Changes" comment="chat working, some functionality in progress">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/assets/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Chat.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Chat.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/stores/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/stores/chat.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +24,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "juniorcreator"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:juniorcreator/chat-socket.io.git",
+    "accountId": "b8296b1b-9640-47d8-9b48-302a75e4fdff"
+  }
+}]]></component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -163,7 +147,7 @@
       <workItem from="1747436516911" duration="9000" />
       <workItem from="1747436671520" duration="43000" />
       <workItem from="1747436824239" duration="2267000" />
-      <workItem from="1747439881021" duration="96225000" />
+      <workItem from="1747439881021" duration="97073000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -189,7 +173,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747435723336</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="chat working, some functionality in progress">
+      <option name="closed" value="true" />
+      <created>1747689915644</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1747689915644</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,7 +190,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="init2" />
-    <option name="LAST_COMMIT_MESSAGE" value="init2" />
+    <MESSAGE value="chat working, some functionality in progress" />
+    <option name="LAST_COMMIT_MESSAGE" value="chat working, some functionality in progress" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
