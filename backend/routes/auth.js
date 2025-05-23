@@ -17,7 +17,18 @@ router.post('/register', async (req, res) => {
     if (candidate) return res.status(400).json({ msg: 'User already exists' });
 
     const hash = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hash });
+
+    const newUser = new User({
+      name,
+      email,
+      password: hash,
+      avatar: '', // default
+      settings: {
+        theme: 'light',
+        notifications: true,
+      },
+    });
+
     await newUser.save();
 
     res.status(201).json({ msg: 'User registered' });
@@ -26,22 +37,36 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// login
+//login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(400).json({ msg: 'Invalid credentials' });
+  try {
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(400).json({ msg: 'Неверный email или пароль' });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.status(200).json({
+      status: 'ok',
+      user: {
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+        settings: user.settings,
+      },
+      token,
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ msg: 'Ошибка сервера при логине' });
   }
-
-  const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-  res.json({
-    status: 'ok',
-    user: { name: user.name, email: user.email },
-    token,
-  });
 });
 
 export default router;

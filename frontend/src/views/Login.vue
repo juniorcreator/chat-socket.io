@@ -9,34 +9,36 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const handleLogin = async () => {
-  console.log('Email:', email.value);
-  console.log('Password:', password.value);
   try {
-    const req = await fetch('http://localhost:3000/auth/login', {
+    const response = await fetch('http://localhost:3000/auth/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: email.value, password: password.value }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+      }),
     });
 
-    if (req.ok) {
-      // we may let user go to chat
-      console.log(req, ' response ok');
-      const json = await req.json();
-      // alert('logged successfully!');
-      // await router.push('/');
-      console.log(req, ' req client');
-      console.log(json, ' req client json');
-      console.log(json.user.name, ' user name ');
-      email.value = '';
-      password.value = '';
-      authStore.setUser(json.user.name, json.user.email, json.token);
-      // store.setUser(json.user.name, json.user.email);
-      await router.push('/chat');
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('Ошибка логина:', error.msg);
+      return;
     }
-  } catch (e) {
-    console.error(e);
+
+    const data = await response.json();
+
+    authStore.setUser(
+      data.user.name,
+      data.user.email,
+      data.token,
+      data.user, // avatar/settings
+    );
+
+    email.value = '';
+    password.value = '';
+    await router.push('/chat');
+  } catch (error) {
+    console.error('Ошибка при отправке запроса логина:', error);
   }
 };
 </script>

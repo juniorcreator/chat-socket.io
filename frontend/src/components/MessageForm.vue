@@ -1,12 +1,16 @@
 <script setup>
 import EmojiPicker from 'vue3-emoji-picker';
+import { useAuthStore } from '@/stores/auth.js';
+import { useShatStore } from '@/stores/chat.js';
 import { onUnmounted, ref } from 'vue';
 import debounce from 'lodash.debounce';
-const props = defineProps(['socket', 'chatStore', 'authStore']);
+const props = defineProps(['socket', 'chatStore', 'authStore', 'selectedUserId']);
 
 const message = ref('');
 const inputRef = ref(null);
 const showEmojiPicker = ref(false);
+const authStore = useAuthStore();
+const chatStore = useShatStore();
 
 function onSelectEmoji(emoji) {
   console.log(emoji);
@@ -23,12 +27,23 @@ const emitTyping = debounce(() => {
 
 const sendMessage = (text, socket) => {
   if (text.trim() && socket) {
-    socket.emit('send-message', {
-      room: props.chatStore.currentRoom,
-      user: props.authStore.userName,
-      userEmail: props.authStore.userEmail,
-      text,
-    });
+    if (!props.chatStore.isPrivateMessage) {
+      socket.emit('send-message', {
+        room: props.chatStore.currentRoom,
+        user: props.authStore.userName,
+        userEmail: props.authStore.userEmail,
+        text,
+      });
+    } else {
+      console.log('private sendMessage handles');
+      socket.emit('private message', {
+        text,
+        toEmail: chatStore.privateSelectedUser.email,
+        userEmail: authStore.userEmail,
+        sender: authStore.userName,
+      });
+    }
+
     socket.emit('stop-typing', {
       room: props.chatStore.currentRoom,
       userId: socket.id,

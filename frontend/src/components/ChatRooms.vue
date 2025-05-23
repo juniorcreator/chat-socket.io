@@ -17,6 +17,7 @@ const joinRoom = (roomName) => {
 };
 const handleSetActiveRoom = (roomId) => {
   props.chatStore.setActiveRoom(roomId);
+  props.chatStore.privateSelectedUser = {};
   joinRoom(props.chatStore.currentRoom);
   console.log('handleSetActiveRoom');
 };
@@ -90,10 +91,21 @@ const handleLogOut = () => {
         v-for="room in rooms"
         :key="room._id"
         @click="handleSetActiveRoom(room._id)"
-        :class="{ 'bg-blue-50 font-medium text-blue-700': room.active }"
-        class="cursor-pointer p-2 rounded-lg hover:bg-blue-100 transition"
+        :class="{
+          'bg-blue-50 font-medium text-blue-700': room.active,
+        }"
+        class="cursor-pointer relative p-2 rounded-lg hover:bg-blue-100 transition relative"
       >
         {{ room.name }}
+        <span
+          v-if="room.hasNewMessage"
+          class="pulse-ring-wrapper relative inline-block w-4 h-4 ml-1 font-bold"
+        >
+          <i class="pi pi-envelope text-[peru] text-sm font-bold z-10 relative"></i>
+          <span
+            class="absolute top-0 left-0 w-full h-full rounded-full bg-[peru] opacity-50 animate-pulse-ring z-0"
+          ></span>
+        </span>
         <button
           v-if="room.createdBy === authStore.userEmail"
           @click="handleDeleteRoom(room._id)"
@@ -108,9 +120,28 @@ const handleLogOut = () => {
       @click="handleLogOut"
       class="mt-6 w-full cursor-pointer bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl transition font-medium"
     >
-      Выйти
+      Exit chat
     </button>
   </aside>
 </template>
 
-<style scoped></style>
+<style scoped>
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+</style>

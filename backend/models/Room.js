@@ -6,6 +6,7 @@ const roomSchema = new mongoose.Schema({
   active: Boolean,
   avatar: { type: String, default: '' },
   lastMessage: { type: String, default: '' },
+  hasNewMessage: { type: Boolean, default: false },
   createdBy: String,
   creatorName: String,
 });

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useShatStore } from '@/stores/chat.js';
 import { useAuthStore } from '@/stores/auth.js';
 import { useSocket } from '@/composables/useSocket';
@@ -14,6 +14,13 @@ const chatStore = useShatStore();
 const chatMessagesRef = ref(null);
 const typingUsers = ref(new Map());
 const { socket } = useSocket(authStore, chatStore, typingUsers, chatMessagesRef);
+
+onMounted(() => {
+  const storedUser = localStorage.getItem('authUser');
+  const parsed = JSON.parse(storedUser);
+  document.body.classList.remove('light', 'dark');
+  document.body.classList.add(parsed.settings.theme);
+});
 </script>
 
 <template>
@@ -28,7 +35,7 @@ const { socket } = useSocket(authStore, chatStore, typingUsers, chatMessagesRef)
     <!-- Chat window -->
     <main class="flex-1 flex flex-col relative">
       <!-- Chat header -->
-      <ChatHeader :chatStore="chatStore" />
+      <ChatHeader :chatStore="chatStore" :socket="socket" />
       <!-- Messages -->
       <ChatMessages
         :chatStore="chatStore"
@@ -45,7 +52,12 @@ const { socket } = useSocket(authStore, chatStore, typingUsers, chatMessagesRef)
       />
     </main>
     <!-- Active users -->
-    <ActiveUsers :chatUsers="chatStore.chatUsers" :socket="socket" />
+    <ActiveUsers
+      :chatUsers="chatStore.chatUsers"
+      :socket="socket"
+      :chatStore="chatStore"
+      :authStore="authStore"
+    />
   </div>
 </template>
 

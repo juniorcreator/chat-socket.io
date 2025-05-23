@@ -26,12 +26,9 @@ export function useSocket(authStore, chatStore, typingUsers, chatMessagesRef) {
           name: authStore.userName,
           email: authStore.userEmail,
           id: socket.value.id,
-        });
-
-        // join room
-        socket.value.emit('join-room', {
-          room: chatStore.currentRoom,
-          user: authStore.userName,
+          connected: true,
+          messages: [],
+          hasNewMessages: false,
         });
       });
 
@@ -88,10 +85,28 @@ export function useSocket(authStore, chatStore, typingUsers, chatMessagesRef) {
       // new msg
       socket.value.on('new-message', (msg, sId) => {
         const newMessage = { ...msg, socketId: sId };
-        chatStore.addMessage(newMessage);
-        // messages.value.push(newMessage);
-        scrollToBottom();
         console.log('✉️ New message:', newMessage);
+        chatStore.addMessage(newMessage);
+        scrollToBottom();
+      });
+
+      // private message
+      socket.value.on('private message', (message) => {
+        console.log(message, ' message');
+        chatStore.addPrivateMessage(message);
+        // socket.value.emit('join-room', {
+        //   room: message.room, // или _id, если хочешь
+        //   user: authStore.userName,
+        // });
+        scrollToBottom();
+      });
+      socket.value.on('new-private-message-alert', ({ fromEmail }) => {
+        chatStore.markUserHasNewMessages(fromEmail);
+      });
+
+      //updating chatUsers
+      socket.value.on('user-updated', (chatUsers) => {
+        chatStore.updateUsers(chatUsers);
       });
 
       // Processing connect/disconnect
@@ -101,14 +116,15 @@ export function useSocket(authStore, chatStore, typingUsers, chatMessagesRef) {
         console.log('👤 user connected:', user);
       });
 
-      socket.value.on('user-disconnected', (leftUser, chatUsers, socketId) => {
-        console.log('🚪 user disconnected:', leftUser);
+      socket.value.on('user-disconnected', (chatUsers, socketId) => {
+        // console.log('🚪 user disconnected:', leftUser);
         typingUsers.value.delete(socketId);
         if (typingTimeouts.has(socketId)) {
           clearTimeout(typingTimeouts.get(socketId));
           typingTimeouts.delete(socketId);
         }
-        chatStore.removeChatUser(socketId);
+        // chatStore.removeChatUser(socketId);
+        chatStore.saveUpdateUsers(socketId);
       });
 
       socket.value.on('disconnect', () => {
@@ -117,6 +133,10 @@ export function useSocket(authStore, chatStore, typingUsers, chatMessagesRef) {
 
       socket.value.on('connect_error', (err) => {
         console.error('❌ Socket error:', err.message);
+      });
+
+      socket.value.onAny((event, ...args) => {
+        console.log(event, ' event', args, ' args');
       });
     }
   });

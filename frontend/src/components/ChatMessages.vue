@@ -12,6 +12,7 @@ defineExpose({
 
 <template>
   <div
+    id="chat-messages"
     class="111 flex-1 overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-135px)] max-md:max-h-[calc(60vh-120px)] relative"
     ref="refContainer"
   >

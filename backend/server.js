@@ -6,6 +6,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 
 import authRoutes from './routes/auth.js';
+import userRoutes from './routes/user.js';
 import chatSocket from './sockets/chatSocket.js';
 
 dotenv.config();
@@ -27,6 +28,7 @@ app.use('/uploads', express.static('uploads'));
 
 // routes
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 
 // socket.io
 chatSocket(io);
